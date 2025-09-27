@@ -92,7 +92,22 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  static uint8_t state = 0;
 
+	  	  	  	 	      if (state == 0)
+	  	  	  	 	      {
+	  	  	  	 	          HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+	  	  	  	 	          HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_SET);
+	  	  	  	 	          state = 1;
+	  	  	  	 	      }
+	  	  	  	 	      else
+	  	  	  	 	      {
+	  	  	  	 	          HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);
+	  	  	  	 	          HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, GPIO_PIN_RESET);
+	  	  	  	 	          state = 0;
+	  	  	  	 	      }
+
+	  	  	  	 	      HAL_Delay(2000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
