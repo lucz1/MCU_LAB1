@@ -86,15 +86,42 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  int hour = 11;
+  int minute = 24;
+  int second = 50;
+  void clearAllClock (){
+    	GPIOB->ODR |= (0b111111111111 << 4);
+  }
+
+  void setNumberOnClock(int num){
+    	num = num % 12;
+    	GPIOB->ODR &= ~(1 << (num+4));
+  }
+
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */
-
+	    clearAllClock();
+	  	setNumberOnClock(second / 5 + 11);
+	  	setNumberOnClock(minute / 5 + 11);
+	  	setNumberOnClock(hour + 11);
+	  	second++;
+	  	if(second >= 60) {
+	  		second = 0;
+	  		minute++;
+	  	}
+	  	if(minute >= 60){
+	  		minute = 0;
+	  		hour ++;
+	  	}
+	  	if(hour >= 12) hour = 0;
+	  	HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -145,42 +172,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SEG_0_Pin|SEG_1_Pin|SEG_2_Pin|SEG_3_Pin
-                          |SEG_4_Pin|SEG_5_Pin|SEG_6_Pin|LED_1_Pin
-                          |LED_2_Pin|LED_3_Pin|LED_4_Pin|LED_5_Pin
-                          |LED_6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, CLK_7_Pin|CLK_8_Pin|CLK_9_Pin|CLK_10_Pin
+                          |CLK_11_Pin|CLK_12_Pin|CLK_1_Pin|CLK_2_Pin
+                          |CLK_3_Pin|CLK_4_Pin|CLK_5_Pin|CLK_6_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin|CLK_7_Pin
-                          |CLK_8_Pin|CLK_9_Pin|CLK_10_Pin|CLK_11_Pin
-                          |CLK_12_Pin|CLK_1_Pin|CLK_2_Pin|CLK_3_Pin
-                          |CLK_4_Pin|CLK_5_Pin|CLK_6_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : SEG_0_Pin SEG_1_Pin SEG_2_Pin SEG_3_Pin
-                           SEG_4_Pin SEG_5_Pin SEG_6_Pin LED_1_Pin
-                           LED_2_Pin LED_3_Pin LED_4_Pin LED_5_Pin
-                           LED_6_Pin */
-  GPIO_InitStruct.Pin = SEG_0_Pin|SEG_1_Pin|SEG_2_Pin|SEG_3_Pin
-                          |SEG_4_Pin|SEG_5_Pin|SEG_6_Pin|LED_1_Pin
-                          |LED_2_Pin|LED_3_Pin|LED_4_Pin|LED_5_Pin
-                          |LED_6_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin LED_GREEN_Pin CLK_7_Pin
-                           CLK_8_Pin CLK_9_Pin CLK_10_Pin CLK_11_Pin
-                           CLK_12_Pin CLK_1_Pin CLK_2_Pin CLK_3_Pin
-                           CLK_4_Pin CLK_5_Pin CLK_6_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin|CLK_7_Pin
-                          |CLK_8_Pin|CLK_9_Pin|CLK_10_Pin|CLK_11_Pin
-                          |CLK_12_Pin|CLK_1_Pin|CLK_2_Pin|CLK_3_Pin
-                          |CLK_4_Pin|CLK_5_Pin|CLK_6_Pin;
+  /*Configure GPIO pins : CLK_7_Pin CLK_8_Pin CLK_9_Pin CLK_10_Pin
+                           CLK_11_Pin CLK_12_Pin CLK_1_Pin CLK_2_Pin
+                           CLK_3_Pin CLK_4_Pin CLK_5_Pin CLK_6_Pin */
+  GPIO_InitStruct.Pin = CLK_7_Pin|CLK_8_Pin|CLK_9_Pin|CLK_10_Pin
+                          |CLK_11_Pin|CLK_12_Pin|CLK_1_Pin|CLK_2_Pin
+                          |CLK_3_Pin|CLK_4_Pin|CLK_5_Pin|CLK_6_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
